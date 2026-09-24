@@ -254,79 +254,18 @@ if (mobileMenuButton && mobileMenu) {
         mobileMenu.classList.toggle("hidden");
     });
 }
+const mobileAddImageButton =
+    document.querySelector("#mobile-add-image-button");
 
+if (mobileAddImageButton) {
+    mobileAddImageButton.addEventListener("click", () => {
+        addImageModal.classList.remove("hidden");
+        addImageModal.classList.add("flex");
 
-// ========================================
-// MODO ESCURO
-// ========================================
+        document.body.classList.add("overflow-hidden");
 
-const themeToggle =
-    document.getElementById("theme-toggle");
-
-const moonIcon =
-    document.getElementById("moon-icon");
-
-const sunIcon =
-    document.getElementById("sun-icon");
-
-const savedTheme =
-    localStorage.getItem("theme");
-
-if (savedTheme === "dark") {
-    ativarModoEscuro();
-} else {
-    ativarModoClaro();
-}
-
-
-themeToggle.addEventListener("click", () => {
-
-    const modoEscuroAtivo =
-        document.body.classList.contains("dark-mode");
-
-    if (modoEscuroAtivo) {
-        ativarModoClaro();
-    } else {
-        ativarModoEscuro();
-    }
-});
-
-
-function ativarModoEscuro() {
-
-    document.body.classList.add("dark-mode");
-
-    moonIcon.classList.add("hidden");
-    sunIcon.classList.remove("hidden");
-
-    themeToggle.setAttribute(
-        "aria-label",
-        "Ativar modo claro"
-    );
-
-    localStorage.setItem(
-        "theme",
-        "dark"
-    );
-}
-
-
-function ativarModoClaro() {
-
-    document.body.classList.remove("dark-mode");
-
-    sunIcon.classList.add("hidden");
-    moonIcon.classList.remove("hidden");
-
-    themeToggle.setAttribute(
-        "aria-label",
-        "Ativar modo escuro"
-    );
-
-    localStorage.setItem(
-        "theme",
-        "light"
-    );
+        mobileMenu.classList.add("hidden");
+    });
 }
 
 

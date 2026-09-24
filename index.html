@@ -8,87 +8,6 @@
     <title>Explore - Galeria</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            transition:
-                background-color 0.3s ease,
-                color 0.3s ease;
-        }
-
-        body.dark-mode {
-            background-color: #0f172a;
-            color: #e2e8f0;
-        }
-
-        body.dark-mode .gallery-card .absolute.inset-0 > span {
-            color: #0f172a !important;
-        }
-
-        body.dark-mode section.bg-white,
-        body.dark-mode section.border-y {
-            background-color: #0f172a !important;
-            border-color: #1e293b !important;
-        }
-
-        body.dark-mode .gallery-card {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-
-        body.dark-mode .text-slate-900 {
-            color: #f1f5f9 !important;
-        }
-
-        body.dark-mode .text-slate-800 {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-mode .text-slate-500 {
-            color: #94a3b8 !important;
-        }
-
-        body.dark-mode .text-slate-700 {
-            color: #cbd5e1 !important;
-        }
-
-        body.dark-mode .bg-white {
-            background-color: #1e293b !important;
-        }
-
-        body.dark-mode .border-slate-200 {
-            border-color: #334155 !important;
-        }
-
-        body.dark-mode .bg-emerald-50 {
-            background-color: #064e3b !important;
-        }
-
-        body.dark-mode .text-emerald-700 {
-            color: #6ee7b7 !important;
-        }
-
-        body.dark-mode #image-modal > div {
-            background-color: #1e293b !important;
-        }
-
-        body.dark-mode #modal-prev,
-        body.dark-mode #modal-next {
-            border-color: #475569 !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-mode .gallery-card,
-        body.dark-mode section,
-        body.dark-mode h2,
-        body.dark-mode h3,
-        body.dark-mode p {
-            transition:
-                background-color 0.3s ease,
-                color 0.3s ease,
-                border-color 0.3s ease;
-        }
-    </style>
-
     <script>
         tailwind.config = {
             theme: {
@@ -171,56 +90,8 @@
                     Adicionar imagem
                 </button>
 
-                <button
-                id="theme-toggle"
-                type="button"
-                aria-label="Ativar modo escuro"
-                class="flex h-10 w-10 items-center justify-center rounded-full
-                    border border-white/20 bg-white/10 text-white
-                    transition hover:bg-white/20"
-            >
-                <svg
-                    id="sun-icon"
-                    aria-hidden="true"
-                    class="hidden h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    
-                >
-                    <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3
-                            6.5 6.5 0 0 0 21 12.8Z">
-                    </path>
-                </svg>
-
-                <svg
-                    id="moon-icon"
-                    aria-hidden="true"
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <path d="M12 2v2"></path>
-                    <path d="M12 20v2"></path>
-                    <path d="m4.93 4.93 1.41 1.41"></path>
-                    <path d="m17.66 17.66 1.41 1.41"></path>
-                    <path d="M2 12h2"></path>
-                    <path d="M20 12h2"></path>
-                    <path d="m6.34 17.66-1.41 1.41"></path>
-                    <path d="m19.07 4.93-1.41 1.41"></path>
-                </svg>
-            </button>
-
             </nav>
             
-
             <a href="#galeria"
                class="hidden rounded-full border border-emerald-400/60
                       px-5 py-2.5 text-sm font-semibold text-emerald-300
@@ -234,16 +105,87 @@
                 id="mobile-menu-button"
                 type="button"
                 aria-label="Abrir menu"
+                aria-expanded="false"
                 class="rounded-lg p-2 text-slate-200 transition
-                       hover:bg-white/10 md:hidden">
+                    hover:bg-white/10 md:hidden">
 
-                <svg aria-hidden="true" focusable="false" class="h-6 w-6" viewBox="0 0 24 24" 
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <svg aria-hidden="true" focusable="false"
+                    class="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round">
                     <path d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
 
             </button>
 
+        </div>
+
+        <div
+            id="mobile-menu"
+            class="hidden border-t border-white/10 bg-slate-950 md:hidden"
+        >
+            <nav class="flex flex-col gap-1 px-5 py-4">
+
+                <a
+                    href="#inicio"
+                    class="rounded-lg px-4 py-3 text-sm font-medium text-slate-200
+                           transition hover:bg-white/10 hover:text-emerald-400"
+                >
+                    Início
+                </a>
+
+                <a
+                    href="#galeria"
+                    class="rounded-lg px-4 py-3 text-sm font-medium text-slate-200
+                           transition hover:bg-white/10 hover:text-emerald-400"
+                >
+                    Galeria
+                </a>
+
+                <a
+                    href="#sobre"
+                    class="rounded-lg px-4 py-3 text-sm font-medium text-slate-200
+                           transition hover:bg-white/10 hover:text-emerald-400"
+                >
+                    Sobre
+                </a>
+
+                <a
+                    href="#contato"
+                    class="rounded-lg px-4 py-3 text-sm font-medium text-slate-200
+                           transition hover:bg-white/10 hover:text-emerald-400"
+                >
+                    Contato
+                </a>
+
+                <button
+                    id="mobile-add-image-button"
+                    type="button"
+                    class="mt-2 inline-flex items-center justify-center gap-2
+                           rounded-lg bg-emerald-600 px-4 py-3 text-sm
+                           font-semibold text-white transition
+                           hover:bg-emerald-700"
+                >
+                    <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        class="h-5 w-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    >
+                        <path d="M12 4v16M4 12h16"></path>
+                    </svg>
+
+                    Adicionar imagem
+                </button>
+
+            </nav>
         </div>
 
     </header>
@@ -271,7 +213,6 @@
 
                     </span>
 
-
                     <h1 class="text-5xl font-bold leading-tight tracking-tight
                                text-white sm:text-6xl lg:text-7xl">
 
@@ -282,14 +223,12 @@
 
                     </h1>
 
-
                     <p class="mt-6 max-w-xl text-base leading-7 text-slate-200
                               sm:text-lg">
 
                         Galeria de imagens para guardar memorias de viagens, paisagens e cultura.
 
                     </p>
-
 
                     <a href="#galeria"
                        class="mt-8 inline-flex items-center gap-3 rounded-full
@@ -459,7 +398,6 @@
 
                         </button>
 
-
                         <button
                             onclick="filtrar('natureza', this)"
                             type="button"
@@ -471,7 +409,6 @@
                             Natureza
 
                         </button>
-
 
                         <button
                             onclick="filtrar('cidades', this)"
@@ -485,7 +422,6 @@
 
                         </button>
 
-
                         <button
                             onclick="filtrar('praias', this)"
                             type="button"
@@ -497,7 +433,6 @@
                             Praias
 
                         </button>
-
 
                         <button
                             onclick="filtrar('cultura', this)"
@@ -573,7 +508,6 @@
                                 </div>
 
                             </div>
-
 
                             <div class="p-4">
 
@@ -651,7 +585,6 @@
 
                             </div>
 
-
                             <div class="p-4">
 
                                 <span
@@ -727,7 +660,6 @@
 
                             </div>
 
-
                             <div class="p-4">
 
                                 <span
@@ -802,7 +734,6 @@
                                 </div>
 
                             </div>
-
 
                             <div class="p-4">
 
@@ -1285,7 +1216,6 @@
 
                     </article>
 
-
                     <article
                         class="gallery-card group overflow-hidden rounded-2xl
                                border border-slate-200 bg-white shadow-sm
@@ -1641,7 +1571,6 @@
 
             </div>
 
-
             <div class="p-5 sm:p-6">
 
                 <div class="flex flex-col gap-4 sm:flex-row
@@ -1673,7 +1602,6 @@
                         </p>
 
                     </div>
-
 
                     <div class="flex gap-2">
 
