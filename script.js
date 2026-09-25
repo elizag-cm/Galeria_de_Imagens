@@ -1,8 +1,18 @@
+// ========================================
+// FILTRO DAS CATEGORIAS
+// ========================================
+
 function filtrar(category, botaoSelecionado) {
-    const exibicoes = document.querySelectorAll(".gallery-card");
-    const botoes = document.querySelectorAll("#category-filters button");
+
+    const exibicoes =
+        document.querySelectorAll(".gallery-card");
+
+    const botoes =
+        document.querySelectorAll("#category-filters button");
+
 
     botoes.forEach(botao => {
+
         botao.classList.remove(
             "bg-emerald-600",
             "text-white",
@@ -13,7 +23,9 @@ function filtrar(category, botaoSelecionado) {
             "bg-white",
             "text-slate-600"
         );
+
     });
+
 
     botaoSelecionado.classList.remove(
         "bg-white",
@@ -26,18 +38,103 @@ function filtrar(category, botaoSelecionado) {
         "shadow-sm"
     );
 
+
     exibicoes.forEach(exibir => {
-        const categoriaExibir = exibir.dataset.category;
+
+        const categoriaExibir =
+            exibir.dataset.category;
+
 
         if (
             category === "todos" ||
             categoriaExibir === category
         ) {
+
             exibir.classList.remove("hidden");
+
         } else {
+
             exibir.classList.add("hidden");
+
         }
+
     });
+
+}
+
+
+// ========================================
+// LOCAL STORAGE
+// ========================================
+
+const STORAGE_KEY = "galeria_imagens";
+
+
+// Pega as imagens salvas
+function obterImagensSalvas() {
+
+    const dados =
+        localStorage.getItem(STORAGE_KEY);
+
+    if (!dados) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(dados);
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao ler imagens do localStorage:",
+            erro
+        );
+
+        return [];
+
+    }
+
+}
+
+
+// Salva as imagens
+function salvarImagens(imagens) {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(imagens)
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao salvar imagens:",
+            erro
+        );
+
+        alert(
+            "Não foi possível salvar a imagem. " +
+            "O armazenamento do navegador pode estar cheio."
+        );
+
+    }
+
+}
+
+
+// Escapa valores antes de colocar dentro de innerHTML
+function escaparHTML(valor) {
+
+    return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
 }
 
 
@@ -45,83 +142,148 @@ function filtrar(category, botaoSelecionado) {
 // MODAL DAS IMAGENS
 // ========================================
 
-const modal = document.querySelector("#image-modal");
+const modal =
+    document.querySelector("#image-modal");
 
-const modalImage = document.querySelector("#modal-image");
-const modalCategory = document.querySelector("#modal-category");
-const modalTitle = document.querySelector("#modal-title");
-const modalLocation = document.querySelector("#modal-location");
-const modalDescription = document.querySelector("#modal-description");
+const modalImage =
+    document.querySelector("#modal-image");
 
-const modalClose = document.querySelector("#modal-close");
-const modalPrev = document.querySelector("#modal-prev");
-const modalNext = document.querySelector("#modal-next");
+const modalCategory =
+    document.querySelector("#modal-category");
+
+const modalTitle =
+    document.querySelector("#modal-title");
+
+const modalLocation =
+    document.querySelector("#modal-location");
+
+const modalDescription =
+    document.querySelector("#modal-description");
+
+const modalClose =
+    document.querySelector("#modal-close");
+
+const modalPrev =
+    document.querySelector("#modal-prev");
+
+const modalNext =
+    document.querySelector("#modal-next");
+
 
 let imagemAtual = 0;
 
 
-// Pega somente os cards que estão visíveis
+// ========================================
+// PEGAR CARDS VISÍVEIS
+// ========================================
+
 function obterCardsVisiveis() {
+
     return Array.from(
         document.querySelectorAll(".gallery-card")
     ).filter(card => {
+
         return !card.classList.contains("hidden");
+
     });
+
 }
 
 
-// Abre o modal
+// ========================================
+// ABRIR MODAL
+// ========================================
+
 function abrirModal(card) {
-    const imagem = card.querySelector("img");
+
+    const imagem =
+        card.querySelector("img");
+
 
     const categoria =
         card.querySelector(".image-category") ||
         card.querySelector("span");
 
+
     const titulo =
         card.querySelector(".image-title") ||
         card.querySelector("h3");
+
 
     const localizacao =
         card.querySelector(".image-location") ||
         card.querySelector("p");
 
+
     const descricao =
         card.querySelector(".image-description");
 
-    modalImage.src = imagem.src;
-    modalImage.alt = imagem.alt;
+
+    modalImage.src =
+        imagem.src;
+
+    modalImage.alt =
+        imagem.alt;
+
 
     modalCategory.textContent =
-        categoria ? categoria.textContent : "";
+        categoria
+            ? categoria.textContent
+            : "";
+
 
     modalTitle.textContent =
-        titulo ? titulo.textContent : "";
+        titulo
+            ? titulo.textContent
+            : "";
+
 
     modalLocation.textContent =
-        localizacao ? localizacao.textContent : "";
+        localizacao
+            ? localizacao.textContent
+            : "";
+
 
     if (descricao) {
+
         modalDescription.textContent =
             descricao.textContent;
+
     } else {
+
         modalDescription.textContent =
             `Confira esta imagem de ${titulo.textContent}, localizada em ${localizacao.textContent}.`;
+
     }
 
+
     modal.classList.remove("hidden");
+
     modal.classList.add("flex");
 
-    document.body.classList.add("overflow-hidden");
+
+    document.body.classList.add(
+        "overflow-hidden"
+    );
+
 }
 
 
-// Fecha o modal
+// ========================================
+// FECHAR MODAL
+// ========================================
+
 function fecharModal() {
+
     modal.classList.add("hidden");
+
     modal.classList.remove("flex");
 
-    document.body.classList.remove("overflow-hidden");
+
+    document.body.classList.remove(
+        "overflow-hidden"
+    );
+
 }
 
 
@@ -129,114 +291,198 @@ function fecharModal() {
 // ABRIR IMAGENS
 // ========================================
 
-// Funciona tanto para imagens originais
-// quanto para imagens adicionadas
-document.querySelector("#gallery-grid").addEventListener("click", event => {
-
-    // Se clicou no botão de excluir,
-    // não abre o modal
-    const botaoExcluir =
-        event.target.closest(".delete-image-button");
-
-    if (botaoExcluir) {
-        return;
-    }
-
-    // Procura a área clicável da imagem
-    const areaImagem =
-        event.target.closest(".open-image-button");
-
-    // Para as imagens antigas
-    const botaoImagem =
-        event.target.closest("[data-image-id]");
-
-    const elementoClicado =
-        areaImagem || botaoImagem;
-
-    if (!elementoClicado) {
-        return;
-    }
-
-    const card =
-        elementoClicado.closest(".gallery-card");
-
-    if (!card) {
-        return;
-    }
-
-    const cardsVisiveis =
-        obterCardsVisiveis();
-
-    imagemAtual =
-        cardsVisiveis.indexOf(card);
-
-    abrirModal(card);
-});
+document
+    .querySelector("#gallery-grid")
+    .addEventListener("click", event => {
 
 
-// Fechar pelo X
-modalClose.addEventListener("click", () => {
-    fecharModal();
-});
+        // Se clicou no botão de excluir,
+        // não abre o modal da imagem
+        const botaoExcluir =
+            event.target.closest(
+                ".delete-image-button"
+            );
 
 
-// Fechar clicando fora da imagem
-modal.addEventListener("click", event => {
-    if (event.target === modal) {
-        fecharModal();
-    }
-});
+        if (botaoExcluir) {
+            return;
+        }
 
 
-// Próxima imagem
-modalNext.addEventListener("click", () => {
-    const cardsVisiveis =
-        obterCardsVisiveis();
-
-    if (cardsVisiveis.length === 0) {
-        return;
-    }
-
-    imagemAtual++;
-
-    if (imagemAtual >= cardsVisiveis.length) {
-        imagemAtual = 0;
-    }
-
-    abrirModal(cardsVisiveis[imagemAtual]);
-});
+        // Procura a área clicável
+        const areaImagem =
+            event.target.closest(
+                ".open-image-button"
+            );
 
 
-// Imagem anterior
-modalPrev.addEventListener("click", () => {
-    const cardsVisiveis =
-        obterCardsVisiveis();
+        // Para imagens antigas
+        const botaoImagem =
+            event.target.closest(
+                "[data-image-id]"
+            );
 
-    if (cardsVisiveis.length === 0) {
-        return;
-    }
 
-    imagemAtual--;
+        const elementoClicado =
+            areaImagem ||
+            botaoImagem;
 
-    if (imagemAtual < 0) {
+
+        if (!elementoClicado) {
+            return;
+        }
+
+
+        const card =
+            elementoClicado.closest(
+                ".gallery-card"
+            );
+
+
+        if (!card) {
+            return;
+        }
+
+
+        const cardsVisiveis =
+            obterCardsVisiveis();
+
+
         imagemAtual =
-            cardsVisiveis.length - 1;
-    }
+            cardsVisiveis.indexOf(card);
 
-    abrirModal(cardsVisiveis[imagemAtual]);
-});
+
+        abrirModal(card);
+
+    });
+
+
+// ========================================
+// FECHAR PELO X
+// ========================================
+
+modalClose.addEventListener(
+    "click",
+    () => {
+
+        fecharModal();
+
+    }
+);
+
+
+// ========================================
+// FECHAR CLICANDO FORA
+// ========================================
+
+modal.addEventListener(
+    "click",
+    event => {
+
+        if (event.target === modal) {
+
+            fecharModal();
+
+        }
+
+    }
+);
+
+
+// ========================================
+// PRÓXIMA IMAGEM
+// ========================================
+
+modalNext.addEventListener(
+    "click",
+    () => {
+
+        const cardsVisiveis =
+            obterCardsVisiveis();
+
+
+        if (cardsVisiveis.length === 0) {
+            return;
+        }
+
+
+        imagemAtual++;
+
+
+        if (
+            imagemAtual >=
+            cardsVisiveis.length
+        ) {
+
+            imagemAtual = 0;
+
+        }
+
+
+        abrirModal(
+            cardsVisiveis[imagemAtual]
+        );
+
+    }
+);
+
+
+// ========================================
+// IMAGEM ANTERIOR
+// ========================================
+
+modalPrev.addEventListener(
+    "click",
+    () => {
+
+        const cardsVisiveis =
+            obterCardsVisiveis();
+
+
+        if (cardsVisiveis.length === 0) {
+            return;
+        }
+
+
+        imagemAtual--;
+
+
+        if (imagemAtual < 0) {
+
+            imagemAtual =
+                cardsVisiveis.length - 1;
+
+        }
+
+
+        abrirModal(
+            cardsVisiveis[imagemAtual]
+        );
+
+    }
+);
 
 
 // ========================================
 // TECLA ESC
 // ========================================
 
-document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-        fecharModal();
-        fecharModalAdicionarImagem();
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+
+            fecharModal();
+
+            fecharModalAdicionarImagem();
+
+            fecharModalExcluir();
+
+        }
+
     }
-});
+);
 
 
 // ========================================
@@ -244,28 +490,69 @@ document.addEventListener("keydown", event => {
 // ========================================
 
 const mobileMenuButton =
-    document.querySelector("#mobile-menu-button");
+    document.querySelector(
+        "#mobile-menu-button"
+    );
+
 
 const mobileMenu =
-    document.querySelector("#mobile-menu");
+    document.querySelector(
+        "#mobile-menu"
+    );
 
-if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-    });
+
+if (
+    mobileMenuButton &&
+    mobileMenu
+) {
+
+    mobileMenuButton.addEventListener(
+        "click",
+        () => {
+
+            mobileMenu.classList.toggle(
+                "hidden"
+            );
+
+        }
+    );
+
 }
+
+
 const mobileAddImageButton =
-    document.querySelector("#mobile-add-image-button");
+    document.querySelector(
+        "#mobile-add-image-button"
+    );
+
 
 if (mobileAddImageButton) {
-    mobileAddImageButton.addEventListener("click", () => {
-        addImageModal.classList.remove("hidden");
-        addImageModal.classList.add("flex");
 
-        document.body.classList.add("overflow-hidden");
+    mobileAddImageButton.addEventListener(
+        "click",
+        () => {
 
-        mobileMenu.classList.add("hidden");
-    });
+            addImageModal.classList.remove(
+                "hidden"
+            );
+
+            addImageModal.classList.add(
+                "flex"
+            );
+
+
+            document.body.classList.add(
+                "overflow-hidden"
+            );
+
+
+            mobileMenu.classList.add(
+                "hidden"
+            );
+
+        }
+    );
+
 }
 
 
@@ -274,102 +561,249 @@ if (mobileAddImageButton) {
 // ========================================
 
 const addImageButton =
-    document.querySelector("#add-image-button");
+    document.querySelector(
+        "#add-image-button"
+    );
+
 
 const addImageModal =
-    document.querySelector("#add-image-modal");
+    document.querySelector(
+        "#add-image-modal"
+    );
+
 
 const addImageClose =
-    document.querySelector("#add-image-close");
+    document.querySelector(
+        "#add-image-close"
+    );
+
 
 const cancelAddImage =
-    document.querySelector("#cancel-add-image");
+    document.querySelector(
+        "#cancel-add-image"
+    );
+
 
 const addImageForm =
-    document.querySelector("#add-image-form");
+    document.querySelector(
+        "#add-image-form"
+    );
 
 
-// Abre o modal de adicionar
-addImageButton.addEventListener("click", () => {
+// ========================================
+// PREVIEW DA IMAGEM
+// ========================================
 
-    addImageModal.classList.remove("hidden");
-    addImageModal.classList.add("flex");
+const imageFile =
+    document.querySelector(
+        "#image-file"
+    );
 
-    document.body.classList.add("overflow-hidden");
-});
+
+const imagePreview =
+    document.querySelector(
+        "#image-preview"
+    );
 
 
-// Fecha o modal de adicionar
+const imageUploadPlaceholder =
+    document.querySelector(
+        "#image-upload-placeholder"
+    );
+
+
+let previewUrl = null;
+
+
+// ========================================
+// PREVIEW DA IMAGEM
+// ========================================
+
+imageFile.addEventListener(
+    "change",
+    event => {
+
+        const arquivo =
+            event.target.files[0];
+
+
+        if (!arquivo) {
+            return;
+        }
+
+
+        // Libera o preview anterior
+        if (previewUrl) {
+
+            URL.revokeObjectURL(
+                previewUrl
+            );
+
+        }
+
+
+        // Cria URL temporária
+        previewUrl =
+            URL.createObjectURL(
+                arquivo
+            );
+
+
+        imagePreview.src =
+            previewUrl;
+
+
+        imagePreview.classList.remove(
+            "hidden"
+        );
+
+
+        imageUploadPlaceholder.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+// ========================================
+// LIMPAR PREVIEW
+// ========================================
+
+function limparPreviewImagem() {
+
+    if (previewUrl) {
+
+        URL.revokeObjectURL(
+            previewUrl
+        );
+
+        previewUrl = null;
+
+    }
+
+
+    imagePreview.src = "";
+
+    imagePreview.classList.add(
+        "hidden"
+    );
+
+
+    imageUploadPlaceholder.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+// ========================================
+// ABRIR MODAL DE ADICIONAR
+// ========================================
+
+addImageButton.addEventListener(
+    "click",
+    () => {
+
+        addImageModal.classList.remove(
+            "hidden"
+        );
+
+        addImageModal.classList.add(
+            "flex"
+        );
+
+
+        document.body.classList.add(
+            "overflow-hidden"
+        );
+
+    }
+);
+
+
+// ========================================
+// FECHAR MODAL DE ADICIONAR
+// ========================================
+
 function fecharModalAdicionarImagem() {
 
     if (!addImageModal) {
         return;
     }
 
-    addImageModal.classList.add("hidden");
-    addImageModal.classList.remove("flex");
 
-    document.body.classList.remove("overflow-hidden");
+    addImageModal.classList.add(
+        "hidden"
+    );
+
+    addImageModal.classList.remove(
+        "flex"
+    );
+
+
+    document.body.classList.remove(
+        "overflow-hidden"
+    );
+
 }
 
 
-// Botão X
-addImageClose.addEventListener("click", () => {
-    fecharModalAdicionarImagem();
-});
+// ========================================
+// BOTÃO X
+// ========================================
 
+addImageClose.addEventListener(
+    "click",
+    () => {
 
-// Botão cancelar
-cancelAddImage.addEventListener("click", () => {
-    fecharModalAdicionarImagem();
-});
-
-
-// Fechar clicando fora
-addImageModal.addEventListener("click", event => {
-
-    if (event.target === addImageModal) {
         fecharModalAdicionarImagem();
+
     }
-});
+);
 
 
 // ========================================
-// ADICIONAR A NOVA IMAGEM NA GALERIA
+// BOTÃO CANCELAR
 // ========================================
 
-addImageForm.addEventListener("submit", event => {
+cancelAddImage.addEventListener(
+    "click",
+    () => {
 
-    event.preventDefault();
+        fecharModalAdicionarImagem();
 
-    const arquivo =
-        document.querySelector("#image-file").files[0];
-
-    const titulo =
-        document.querySelector("#image-title").value;
-
-    const categoria =
-        document.querySelector("#image-category").value;
-
-    const localizacao =
-        document.querySelector("#image-location").value;
-
-    const descricao =
-        document.querySelector("#image-description").value;
-
-
-    if (!arquivo) {
-        alert("Escolha uma imagem.");
-        return;
     }
+);
 
 
-    // Cria uma URL temporária para a imagem
-    const imagemUrl =
-        URL.createObjectURL(arquivo);
+// ========================================
+// FECHAR CLICANDO FORA
+// ========================================
+
+addImageModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            addImageModal
+        ) {
+
+            fecharModalAdicionarImagem();
+
+        }
+
+    }
+);
 
 
-    // Cria o card
+// ========================================
+// CRIAR CARD
+// ========================================
+
+function criarCard(imagem) {
+
     const card =
         document.createElement("article");
 
@@ -378,14 +812,14 @@ addImageForm.addEventListener("submit", event => {
         "gallery-card group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-lg";
 
 
+    // Categoria
     card.dataset.category =
-        categoria;
+        imagem.categoria;
 
 
-    // Guarda a URL para podermos liberar
-    // a memória quando a imagem for excluída
-    card.dataset.imageUrl =
-        imagemUrl;
+    // ID salvo no localStorage
+    card.dataset.id =
+        imagem.id;
 
 
     card.innerHTML = `
@@ -393,17 +827,20 @@ addImageForm.addEventListener("submit", event => {
         <div class="relative aspect-[4/3] overflow-hidden">
 
             <!-- Área que abre o modal -->
+
             <div
                 class="open-image-button h-full w-full cursor-pointer"
             >
 
                 <img
-                    src="${imagemUrl}"
-                    alt="${titulo}"
+                    src="${imagem.imagem}"
+                    alt="${escaparHTML(imagem.titulo)}"
                     class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 >
 
+
                 <!-- Overlay -->
+
                 <div
                     class="absolute inset-0 flex items-center justify-center
                            bg-slate-950/0 transition duration-300
@@ -445,6 +882,7 @@ addImageForm.addEventListener("submit", event => {
 
 
             <!-- BOTÃO DE EXCLUIR -->
+
             <button
                 type="button"
                 class="delete-image-button absolute right-3 top-3 z-10
@@ -485,48 +923,294 @@ addImageForm.addEventListener("submit", event => {
                        bg-emerald-50 px-3 py-1 text-xs
                        font-medium text-emerald-700"
             >
-                ${categoria}
+                ${escaparHTML(imagem.categoria)}
             </span>
 
 
             <h3
                 class="image-title mt-3 text-lg font-semibold text-slate-900"
             >
-                ${titulo}
+                ${escaparHTML(imagem.titulo)}
             </h3>
 
 
             <p
                 class="image-location mt-1 text-sm text-slate-500"
             >
-                ${localizacao}
+                ${escaparHTML(imagem.localizacao)}
             </p>
 
 
             <p
                 class="image-description mt-3 text-sm text-slate-600"
             >
-                ${descricao}
+                ${escaparHTML(imagem.descricao)}
             </p>
 
         </div>
+
     `;
 
 
+    return card;
+
+}
+
+
+// ========================================
+// LER ARQUIVO COMO BASE64
+// ========================================
+
+function converterImagemParaBase64(arquivo) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = () => {
+
+                resolve(
+                    reader.result
+                );
+
+            };
+
+
+            reader.onerror = () => {
+
+                reject(
+                    reader.error
+                );
+
+            };
+
+
+            reader.readAsDataURL(
+                arquivo
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// ADICIONAR NOVA IMAGEM
+// ========================================
+
+addImageForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const arquivo =
+            document.querySelector(
+                "#image-file"
+            ).files[0];
+
+
+        const titulo =
+            document.querySelector(
+                "#image-title"
+            ).value.trim();
+
+
+        const categoria =
+            document.querySelector(
+                "#image-category"
+            ).value;
+
+
+        const localizacao =
+            document.querySelector(
+                "#image-location"
+            ).value.trim();
+
+
+        const descricao =
+            document.querySelector(
+                "#image-description"
+            ).value.trim();
+
+
+        if (!arquivo) {
+
+            alert(
+                "Escolha uma imagem."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            // ====================================
+            // CONVERTE A IMAGEM PARA BASE64
+            // ====================================
+
+            const imagemBase64 =
+                await converterImagemParaBase64(
+                    arquivo
+                );
+
+
+            // ====================================
+            // CRIA O OBJETO DA IMAGEM
+            // ====================================
+
+            const novaImagem = {
+
+                id:
+                    Date.now().toString(),
+
+                imagem:
+                    imagemBase64,
+
+                titulo:
+                    titulo,
+
+                categoria:
+                    categoria,
+
+                localizacao:
+                    localizacao,
+
+                descricao:
+                    descricao
+
+            };
+
+
+            // ====================================
+            // PEGA AS IMAGENS EXISTENTES
+            // ====================================
+
+            const imagens =
+                obterImagensSalvas();
+
+
+            // ====================================
+            // ADICIONA A NOVA IMAGEM
+            // ====================================
+
+            imagens.push(
+                novaImagem
+            );
+
+
+            // ====================================
+            // SALVA NO LOCAL STORAGE
+            // ====================================
+
+            salvarImagens(
+                imagens
+            );
+
+
+            // ====================================
+            // CRIA O CARD NA TELA
+            // ====================================
+
+            const card =
+                criarCard(
+                    novaImagem
+                );
+
+
+            const galeria =
+                document.querySelector(
+                    "#gallery-grid"
+                );
+
+
+            galeria.appendChild(
+                card
+            );
+
+
+            // ====================================
+            // FECHA O FORMULÁRIO
+            // ====================================
+
+            fecharModalAdicionarImagem();
+
+
+            // ====================================
+            // LIMPA O FORMULÁRIO
+            // ====================================
+
+            addImageForm.reset();
+
+
+            // ====================================
+            // LIMPA O PREVIEW
+            // ====================================
+
+            limparPreviewImagem();
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao adicionar imagem:",
+                erro
+            );
+
+
+            alert(
+                "Não foi possível salvar a imagem."
+            );
+
+        }
+
+    }
+);
+
+
+// ========================================
+// CARREGAR IMAGENS DO LOCAL STORAGE
+// ========================================
+
+function carregarImagensSalvas() {
+
+    const imagens =
+        obterImagensSalvas();
+
+
     const galeria =
-        document.querySelector("#gallery-grid");
+        document.querySelector(
+            "#gallery-grid"
+        );
 
 
-    galeria.appendChild(card);
+    if (!galeria) {
+        return;
+    }
 
 
-    // Fecha o formulário
-    fecharModalAdicionarImagem();
+    imagens.forEach(imagem => {
+
+        const card =
+            criarCard(
+                imagem
+            );
 
 
-    // Limpa os campos
-    addImageForm.reset();
-});
+        galeria.appendChild(
+            card
+        );
+
+    });
+
+}
 
 
 // ========================================
@@ -535,59 +1219,379 @@ addImageForm.addEventListener("submit", event => {
 
 document
     .querySelector("#gallery-grid")
-    .addEventListener("click", event => {
+    .addEventListener(
+        "click",
+        event => {
 
-        const botaoExcluir =
-            event.target.closest(
-                ".delete-image-button"
+
+            const botaoExcluir =
+                event.target.closest(
+                    ".delete-image-button"
+                );
+
+
+            if (!botaoExcluir) {
+                return;
+            }
+
+
+            const card =
+                botaoExcluir.closest(
+                    ".gallery-card"
+                );
+
+
+            if (!card) {
+                return;
+            }
+
+
+            abrirModalExcluir(
+                card
             );
 
-
-        if (!botaoExcluir) {
-            return;
         }
+    );
 
 
-        const card =
-            botaoExcluir.closest(".gallery-card");
+// ========================================
+// MODAL DE CONFIRMAÇÃO
+// ========================================
+
+function criarModalExcluir() {
+
+    // Se o modal já existe,
+    // reutiliza
+    if (
+        document.querySelector(
+            "#delete-image-modal"
+        )
+    ) {
+
+        return document.querySelector(
+            "#delete-image-modal"
+        );
+
+    }
 
 
-        if (!card) {
-            return;
-        }
+    const modalExcluir =
+        document.createElement(
+            "div"
+        );
 
 
-        const confirmar =
-            confirm(
-                "Tem certeza que deseja excluir esta imagem?"
-            );
+    modalExcluir.id =
+        "delete-image-modal";
 
 
-        if (!confirmar) {
-            return;
-        }
+    modalExcluir.className =
+        "fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm";
 
 
-        // Libera a URL temporária da imagem
-        if (card.dataset.imageUrl) {
+    modalExcluir.innerHTML = `
 
-            URL.revokeObjectURL(
-                card.dataset.imageUrl
-            );
-        }
+        <div
+            class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+        >
+
+            <div class="flex items-start gap-4">
+
+                <!-- Ícone de alerta -->
+
+                <div
+                    class="flex h-12 w-12 shrink-0 items-center justify-center
+                           rounded-full bg-red-100 text-red-600"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m-4 0h14"
+                        />
+
+                    </svg>
+
+                </div>
 
 
-        // Se essa imagem estiver aberta no modal,
-        // fecha o modal
-        if (
-            !modal.classList.contains("hidden") &&
-            modalImage.src ===
-                card.querySelector("img").src
-        ) {
-            fecharModal();
-        }
+                <div>
+
+                    <h2
+                        id="delete-modal-title"
+                        class="text-lg font-semibold text-slate-900"
+                    >
+                        Excluir imagem
+                    </h2>
 
 
-        // Remove o card
-        card.remove();
-    });
+                    <p
+                        class="mt-2 text-sm leading-6 text-slate-500"
+                    >
+                        Tem certeza que deseja excluir esta imagem?
+                        Esta ação não poderá ser desfeita.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Botões -->
+
+            <div
+                class="mt-6 flex justify-end gap-3"
+            >
+
+                <!-- Cancelar -->
+
+                <button
+                    type="button"
+                    id="cancel-delete-image"
+                    class="rounded-lg border border-slate-200
+                           px-4 py-2.5 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-slate-50"
+                >
+                    Cancelar
+                </button>
+
+
+                <!-- Excluir -->
+
+                <button
+                    type="button"
+                    id="confirm-delete-image"
+                    class="rounded-lg bg-red-600
+                           px-4 py-2.5 text-sm font-medium
+                           text-white transition
+                           hover:bg-red-700"
+                >
+                    Excluir
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modalExcluir
+    );
+
+
+    return modalExcluir;
+
+}
+
+
+// ========================================
+// FECHAR MODAL DE EXCLUSÃO
+// ========================================
+
+function fecharModalExcluir() {
+
+    const modalExcluir =
+        document.querySelector(
+            "#delete-image-modal"
+        );
+
+
+    if (!modalExcluir) {
+        return;
+    }
+
+
+    modalExcluir.classList.add(
+        "hidden"
+    );
+
+    modalExcluir.classList.remove(
+        "flex"
+    );
+
+
+    document.body.classList.remove(
+        "overflow-hidden"
+    );
+
+}
+
+
+// ========================================
+// EXCLUIR A IMAGEM
+// ========================================
+
+function excluirImagem(card) {
+
+    if (!card) {
+        return;
+    }
+
+
+    // Pega o ID da imagem
+    const id =
+        card.dataset.id;
+
+
+    // Se não possui ID,
+    // provavelmente é uma imagem original
+    if (!id) {
+
+        return;
+
+    }
+
+
+    // ====================================
+    // PEGA AS IMAGENS DO LOCAL STORAGE
+    // ====================================
+
+    const imagens =
+        obterImagensSalvas();
+
+
+    // ====================================
+    // REMOVE SOMENTE A IMAGEM COM O ID
+    // ====================================
+
+    const novasImagens =
+        imagens.filter(
+            imagem => imagem.id !== id
+        );
+
+
+    // ====================================
+    // SALVA NOVAMENTE
+    // ====================================
+
+    salvarImagens(
+        novasImagens
+    );
+
+
+    // ====================================
+    // SE A IMAGEM ESTIVER ABERTA
+    // FECHA O MODAL
+    // ====================================
+
+    const imagem =
+        card.querySelector("img");
+
+
+    if (
+        imagem &&
+        !modal.classList.contains("hidden") &&
+        modalImage.src === imagem.src
+    ) {
+
+        fecharModal();
+
+    }
+
+
+    card.remove();
+
+}
+
+
+// ========================================
+// ABRIR MODAL DE EXCLUSÃO
+// ========================================
+
+function abrirModalExcluir(card) {
+
+    const modalExcluir =
+        criarModalExcluir();
+
+
+    const botaoCancelar =
+        modalExcluir.querySelector(
+            "#cancel-delete-image"
+        );
+
+
+    const botaoConfirmar =
+        modalExcluir.querySelector(
+            "#confirm-delete-image"
+        );
+
+
+    // Mostra o modal
+
+    modalExcluir.classList.remove(
+        "hidden"
+    );
+
+    modalExcluir.classList.add(
+        "flex"
+    );
+
+
+    // Impede o scroll da página
+
+    document.body.classList.add(
+        "overflow-hidden"
+    );
+
+
+    botaoCancelar.onclick = () => {
+
+        fecharModalExcluir();
+
+    };
+
+
+    botaoConfirmar.onclick = () => {
+
+        excluirImagem(
+            card
+        );
+
+
+        fecharModalExcluir();
+
+    };
+
+
+    modalExcluir.onclick =
+        event => {
+
+            if (
+                event.target ===
+                modalExcluir
+            ) {
+
+                fecharModalExcluir();
+
+            }
+
+        };
+
+}
+
+
+// ========================================
+// CARREGAR DADOS SALVOS
+// ========================================
+//
+// Essa função precisa ser chamada
+// depois que todo o JavaScript foi
+// definido.
+//
+
+carregarImagensSalvas();
